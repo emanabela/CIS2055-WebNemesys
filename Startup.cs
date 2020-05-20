@@ -1,21 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data;
+using System.Data.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Nemesys.Areas.Identity.Data;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.EntityFrameworkCore;
+using Nemesys.Models;
+using Nemesys.Data;
 
 namespace Nemesys
 {
     public class Startup
     {
+        private IConfiguration _config;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _config = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -23,8 +34,13 @@ namespace Nemesys
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDefaultIdentity<NemesysUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<NemesysContext>().AddDefaultTokenProviders();
+            services.AddDbContextPool<AppDbContext>(
+                options => options.UseSqlServer(_config.GetConnectionString("NemesysContextConnection")));
             services.AddControllersWithViews();
             services.AddRazorPages();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

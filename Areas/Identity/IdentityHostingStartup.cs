@@ -20,8 +20,8 @@ namespace Nemesys.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("NemesysContextConnection")));
 
-                services.AddDefaultIdentity<NemesysUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                    .AddEntityFrameworkStores<NemesysContext>();
+                //services.AddDefaultIdentity<NemesysUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                //    .AddEntityFrameworkStores<NemesysContext>();
             });
         }
     }
